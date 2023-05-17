@@ -20,5 +20,8 @@
   "homepage": "https://github.com/mustafa-mun/web-crawler#readme",
   "devDependencies": {
     "jest": "^29.5.0"
+  },
+  "dependencies": {
+    "jsdom": "^22.0.0"
   }
 }
