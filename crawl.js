@@ -12,6 +12,11 @@ function normalizeURL(url) {
   return sanitizedURL.hostname + sanitizedURL.pathname;
 }
 
+function getURLsFromHTML(htmlBody, baseURL) {
+  // func
+}
+
 module.exports = {
   normalizeURL,
+  getURLsFromHTML
 };
