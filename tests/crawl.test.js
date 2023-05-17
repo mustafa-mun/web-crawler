@@ -1,5 +1,6 @@
 const { test, expect } = require("@jest/globals");
 const { normalizeURL, getURLsFromHTML, isURL } = require("../crawl");
+const { sortObject } = require("../report");
 
 // NORMALIZE URL TESTS
 const expectedOutput = "twitter.com/home";
@@ -63,4 +64,27 @@ test("all strings are urls", () => {
     if (!isURL(str)) isValid = false;
   }
   expect(isValid).toBeTruthy();
+});
+
+// SORT OBJECT TESTS
+
+test("returns empty object if object is empty", () => {
+  const obj = {};
+  expect(sortObject(obj)).toMatchObject({});
+});
+
+test("returns sorted object", () => {
+  const obj = {
+    one: 1,
+    two: 2,
+    three: 3,
+    four: 4,
+  };
+  const expectedObj = {
+    four: 4,
+    three: 3,
+    two: 2,
+    one: 1,
+  };
+  expect(sortObject(obj)).toMatchObject(expectedObj);
 });
