@@ -40,8 +40,29 @@ function getURLsFromHTML(htmlBody, baseURL) {
   return output;
 }
 
+async function crawlPage(baseURL, url, pages) {
+  try {
+    const response = await fetch(baseURL);
+    if (response.status >= 400) {
+      throw new Error("Status error");
+    }
+    if (!response.headers.get("content-type").includes("text/html")) {
+      throw new Error("Content-type error");
+    }
+    const HTML = await response.text();
+    console.log(HTML);
+  } catch (error) {
+    console.log(error.message);
+  }
+}
+
+crawlPage(
+  "https://stackoverflow.com/questions/4351521/how-do-i-pass-command-line-arguments-to-a-node-js-program"
+);
+
 module.exports = {
   normalizeURL,
   getURLsFromHTML,
   isURL,
+  crawlPage,
 };
