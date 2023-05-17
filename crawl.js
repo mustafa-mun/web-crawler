@@ -1,3 +1,5 @@
+const { JSDOM } = require("jsdom");
+
 function normalizeURL(url) {
   const newURL = new URL(url);
   // Sanitize the url
@@ -21,7 +23,19 @@ function isURL(str) {
 }
 
 function getURLsFromHTML(htmlBody, baseURL) {
-  // func
+  const dom = new JSDOM(htmlBody);
+  const aTags = dom.window.document.querySelectorAll("a");
+  const output = [];
+
+  for (let tag of aTags) {
+    if (!isURL(tag)) {
+      let url = `${baseURL}${tag.href}`;
+      output.push(url);
+    } else {
+      output.push(tag.href);
+    }
+  }
+  return output;
 }
 
 module.exports = {

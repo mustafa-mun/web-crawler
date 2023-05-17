@@ -46,10 +46,21 @@ const htmlInput = `<html>
 </footer>
 </html>`;
 
-test.skip("relative URLs converted to absolute URLs", () => {
-  expect(getURLsFromHTML(htmlInput)[0]).toBe("https://boot.dev/about.html");
+test("relative URLs converted to absolute URLs", () => {
+  expect(getURLsFromHTML(htmlInput, "https://boot.dev/")[0]).toBe(
+    "https://boot.dev/about.html"
+  );
 });
 
-test.skip("all 'a' tags are found", () => {
-  expect(getURLsFromHTML).toHaveLength(3);
+test("all 'a' tags are found", () => {
+  expect(getURLsFromHTML(htmlInput)).toHaveLength(3);
+});
+
+test("all strings are urls", () => {
+  const outputArr = getURLsFromHTML(htmlInput, "https://boot.dev/");
+  let isValid = true;
+  for (let str of outputArr) {
+    if (!isURL(str)) isValid = false;
+  }
+  expect(isValid).toBeTruthy();
 });
