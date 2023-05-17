@@ -1,0 +1,24 @@
+{
+  "name": "web-crawler",
+  "version": "1.0.0",
+  "description": "web crawler that generates an \"internal links\" report for any website on the internet by crawling each page of the site",
+  "main": "index.js",
+  "scripts": {
+    "start": "node main.js",
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mustafa-mun/web-crawler.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mustafa-mun/web-crawler/issues"
+  },
+  "homepage": "https://github.com/mustafa-mun/web-crawler#readme",
+  "devDependencies": {
+    "jest": "^29.5.0"
+  }
+}
