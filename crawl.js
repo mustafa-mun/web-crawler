@@ -16,8 +16,10 @@ function normalizeURL(url) {
 
 function isURL(str) {
   try {
+    // Try creating a URL object with input str
     return new URL(str);
   } catch (error) {
+    // URL couldn't be initialized, str is not an URL.
     return false;
   }
 }
