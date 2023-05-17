@@ -40,39 +40,41 @@ function getURLsFromHTML(htmlBody, baseURL) {
   return output;
 }
 
-async function crawlPage(baseURL, currentURl = baseURL, pages = {}) {
-  if (new URL(baseURL).hostname !== new URL(currentURl).hostname) return pages;
-  const normalized = normalizeURL(currentURl);
+async function crawlPage(baseURL, currentURL = baseURL, pages = {}) {
+  if (new URL(baseURL).hostname !== new URL(currentURL).hostname) return pages;
+  const normalized = normalizeURL(currentURL);
 
-  if (pages[normalized]) {
+  if (pages[normalized] > 0) {
     pages[normalized] += 1;
     return pages;
   }
+
+  pages[normalized] = 1;
+
   try {
-    const response = await fetch(currentURl);
+    const response = await fetch(currentURL);
     if (response.status >= 400) {
-      throw new Error("Status error");
+      throw new Error(`Status error: ${response.status}`);
     }
     if (!response.headers.get("content-type").includes("text/html")) {
-      throw new Error("Content-type error");
+      throw new Error(
+        `Content-type error, Content-tpe is: ${response.headers.get(
+          "content-type"
+        )}`
+      );
     }
     const HTML = await response.text();
     const URLs = getURLsFromHTML(HTML, baseURL);
 
     for (let url of URLs) {
-      const normalized = normalizeURL(url);
-      pages[normalized] = 1;
-      await crawlPage(baseURL, url, pages);
+      pages = await crawlPage(baseURL, url, pages);
     }
     return pages;
   } catch (error) {
     console.log(error.message);
+    return pages;
   }
 }
-
-crawlPage(
-  "https://stackoverflow.com/questions/4351521/how-do-i-pass-command-line-arguments-to-a-node-js-program"
-);
 
 module.exports = {
   normalizeURL,
