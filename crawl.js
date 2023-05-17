@@ -40,9 +40,16 @@ function getURLsFromHTML(htmlBody, baseURL) {
   return output;
 }
 
-async function crawlPage(baseURL, url, pages) {
+async function crawlPage(baseURL, currentURl = baseURL, pages = {}) {
+  if (new URL(baseURL).hostname !== new URL(currentURl).hostname) return pages;
+  const normalized = normalizeURL(currentURl);
+
+  if (pages[normalized]) {
+    pages[normalized] += 1;
+    return pages;
+  }
   try {
-    const response = await fetch(baseURL);
+    const response = await fetch(currentURl);
     if (response.status >= 400) {
       throw new Error("Status error");
     }
@@ -50,7 +57,14 @@ async function crawlPage(baseURL, url, pages) {
       throw new Error("Content-type error");
     }
     const HTML = await response.text();
-    console.log(HTML);
+    const URLs = getURLsFromHTML(HTML, baseURL);
+
+    for (let url of URLs) {
+      const normalized = normalizeURL(url);
+      pages[normalized] = 1;
+      await crawlPage(baseURL, url, pages);
+    }
+    return pages;
   } catch (error) {
     console.log(error.message);
   }
